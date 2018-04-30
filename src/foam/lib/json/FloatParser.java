@@ -9,8 +9,8 @@ package foam.lib.json;
 import foam.lib.parse.*;
 
 public class FloatParser implements Parser {
+  private static ThreadLocal<StringBuilder> n = new ThreadLocal<StringBuilder>();
   public PStream parse(PStream ps, ParserContext x) {
-    StringBuilder n = new StringBuilder();
     boolean decimalFound = false;
 
     if ( ! ps.valid() ) return null;
@@ -18,14 +18,14 @@ public class FloatParser implements Parser {
     char c = ps.head();
 
     if ( c == '-' ) {
-      n.append(c);
+      n.get().append(c);
       ps = ps.tail();
       if ( ! ps.valid() ) return null;
       c = ps.head();
     }
 
     // Float numbers must start with a digit: 0.1, 4.0
-    if ( Character.isDigit(c) ) n.append(c);
+    if ( Character.isDigit(c) ) n.get().append(c);
     else return null;
 
     ps = ps.tail();
@@ -33,17 +33,17 @@ public class FloatParser implements Parser {
     while ( ps.valid() ) {
       c = ps.head();
       if ( Character.isDigit(c) ) {
-          n.append(c);
+          n.get().append(c);
       } else if ( c == '.' ) { // TODO: localization
         if ( decimalFound ) return null;
         decimalFound = true;
-        n.append(c);
+        n.get().append(c);
       } else {
         break;
       }
       ps = ps.tail();
     }
 
-    return ps.setValue(n.length() > 0 ? Float.valueOf(n.toString()) : null);
+    return ps.setValue(n.get().length() > 0 ? Float.valueOf(n.toString()) : null);
   }
 }

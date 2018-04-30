@@ -6,15 +6,15 @@ import foam.lib.parse.ParserContext;
 
 public class ValueParser
   implements Parser {
+  private static ThreadLocal<StringBuilder> s = new ThreadLocal<StringBuilder>();
   @Override
   public PStream parse(PStream ps, ParserContext x) {
-    StringBuilder s = new StringBuilder();
 
     while ( ps.valid() ) {
       char c = ps.head();
       if ( c == ' ' ) break;
       ps = ps.tail();
-      s.append(c);
+      s.get().append(c);
     }
 
     return ps.setValue(new foam.mlang.Constant(s.toString()));
