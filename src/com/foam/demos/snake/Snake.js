@@ -6,7 +6,7 @@
 
 foam.CLASS({
   package: 'com.foam.demos.snake',
-  name: 'Appel',
+  name: 'Apple',
   extends: 'foam.graphics.Box',
 
   implements: [
@@ -46,7 +46,7 @@ foam.CLASS({
   extends: 'foam.u2.Element',
 
   requires: [
-    'com.foam.demos.snake.Appel',
+    'com.foam.demos.snake.Apple',
     'com.foam.demos.snake.SnakeHead',
     'foam.graphics.Box',
     'foam.graphics.Label',
@@ -69,9 +69,9 @@ foam.CLASS({
       }
     },
     {
-      name: 'appel',
+      name: 'apple',
       factory: function() {
-        return this.Appel.create({
+        return this.Apple.create({
           border: null,
           color: 'green',
           width: 26,
@@ -80,9 +80,9 @@ foam.CLASS({
       }
     },
     { //TODO  just for action ; to be deleted 
-      name: 'appelMove',
+      name: 'appleMove',
       factory: function() {
-        return this.Appel.create({
+        return this.Apple.create({
           border: null,
           color: 'red',
           width: 26,
@@ -108,11 +108,11 @@ foam.CLASS({
 
   listeners: [
     {
-      name: 'onAppelMove',
+      name: 'onAppleMove',
       isFramed: true,
       code: function() {
 
-        if ( this.appel.x == this.snake.x && this.appel.y == this.snake.y ) {
+        if ( this.apple.x == this.snake.x && this.apple.y == this.snake.y ) {
           var gameGool = this.Label.create({
             text: "Gool",
             align: 'center',
@@ -206,23 +206,23 @@ foam.CLASS({
       this.snake.y = 2 * this.SNAKE_SPEED;
 
       // just to have the action active.   
-      this.appelMove.x = 0;
-      this.appelMove.y = 200 * this.SNAKE_SPEED;
+      this.appleMove.x = 0;
+      this.appleMove.y = 200 * this.SNAKE_SPEED;
 
-      this.appelMove.vx = this.appelMove.vy = 1;
+      this.appleMove.vx = this.appleMove.vy = 1;
 
-      this.appelMove.x$.sub(this.onAppelMove);
+      this.appleMove.x$.sub(this.onAppleMove);
 
-      // Setup appel 
-      this.appel.x = 100 * this.SNAKE_SPEED;
-      this.appel.y = 100 * this.SNAKE_SPEED;
+      // Setup apple 
+      this.apple.x = 100 * this.SNAKE_SPEED;
+      this.apple.y = 100 * this.SNAKE_SPEED;
 
       // Setup Physics
-      this.collider.add(this.appelMove, this.snake).start();
+      this.collider.add(this.appleMove, this.snake).start();
 
       this.canvas.add(
-        this.appelMove,
-        this.appel,
+        this.appleMove,
+        this.apple,
         this.snake);
     }
   ]
