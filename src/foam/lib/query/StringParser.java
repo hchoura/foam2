@@ -14,19 +14,7 @@ import foam.lib.parse.ParserContext;
 
 public class StringParser implements Parser {
   public final static char ESCAPE = '\\';
-  private static ThreadLocal<StringBuilder> sb = new ThreadLocal<StringBuilder>(){
-    @Override
-    protected StringBuilder initialValue() {
-      return new StringBuilder();
-    }
-
-    @Override
-    public StringBuilder get() {
-      StringBuilder b = super.get();
-      b.setLength(0);
-      return b;
-    }
-  };
+  private static ThreadLocal<StringBuilder> sb = new ThreadLocal<StringBuilder>(){};
 
   public StringParser() {
   }
@@ -37,6 +25,8 @@ public class StringParser implements Parser {
 
     char delim = ' ';
     char lastc = delim;
+
+    sb.set(new StringBuilder());
 
     PStream lastPs=null;
 
@@ -81,6 +71,6 @@ public class StringParser implements Parser {
       lastc = c;
     }
 
-    return ps.tail().setValue(sb.toString());
+    return ps.tail().setValue(sb.get().toString());
   }
 }

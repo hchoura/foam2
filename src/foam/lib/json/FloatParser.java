@@ -12,6 +12,7 @@ public class FloatParser implements Parser {
   private static ThreadLocal<StringBuilder> n = new ThreadLocal<StringBuilder>();
   public PStream parse(PStream ps, ParserContext x) {
     boolean decimalFound = false;
+    n.set(new StringBuilder());
 
     if ( ! ps.valid() ) return null;
 
@@ -44,6 +45,6 @@ public class FloatParser implements Parser {
       ps = ps.tail();
     }
 
-    return ps.setValue(n.get().length() > 0 ? Float.valueOf(n.toString()) : null);
+    return ps.setValue(n.get().length() > 0 ? Float.valueOf(n.get().toString()) : null);
   }
 }
