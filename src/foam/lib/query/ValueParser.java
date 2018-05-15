@@ -21,7 +21,7 @@ public class ValueParser
   };
   @Override
   public PStream parse(PStream ps, ParserContext x) {
-    StringBuilder builder = sb.get();
+    StringBuilder builder = s.get();
 
     while ( ps.valid() ) {
       char c = ps.head();
