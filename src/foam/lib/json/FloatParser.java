@@ -9,24 +9,37 @@ package foam.lib.json;
 import foam.lib.parse.*;
 
 public class FloatParser implements Parser {
-  private static ThreadLocal<StringBuilder> n = new ThreadLocal<StringBuilder>();
+  private static ThreadLocal<StringBuilder> n = new ThreadLocal<StringBuilder>(){
+    @Override
+    protected StringBuilder initialValue() {
+      return new StringBuilder();
+    }
+
+    @Override
+    public StringBuilder get() {
+      StringBuilder b = super.get();
+      b.setLength(0);
+      return b;
+    }
+
+  };
   public PStream parse(PStream ps, ParserContext x) {
     boolean decimalFound = false;
-    n.set(new StringBuilder());
+    StringBuilder builder = n.get();
 
     if ( ! ps.valid() ) return null;
 
     char c = ps.head();
 
     if ( c == '-' ) {
-      n.get().append(c);
+      builder.append(c);
       ps = ps.tail();
       if ( ! ps.valid() ) return null;
       c = ps.head();
     }
 
     // Float numbers must start with a digit: 0.1, 4.0
-    if ( Character.isDigit(c) ) n.get().append(c);
+    if ( Character.isDigit(c) ) builder.append(c);
     else return null;
 
     ps = ps.tail();
@@ -34,17 +47,17 @@ public class FloatParser implements Parser {
     while ( ps.valid() ) {
       c = ps.head();
       if ( Character.isDigit(c) ) {
-          n.get().append(c);
+        builder.append(c);
       } else if ( c == '.' ) { // TODO: localization
         if ( decimalFound ) return null;
         decimalFound = true;
-        n.get().append(c);
+        builder.append(c);
       } else {
         break;
       }
       ps = ps.tail();
     }
 
-    return ps.setValue(n.get().length() > 0 ? Float.valueOf(n.get().toString()) : null);
+    return ps.setValue(builder.length() > 0 ? Float.valueOf(builder.toString()) : null);
   }
 }
