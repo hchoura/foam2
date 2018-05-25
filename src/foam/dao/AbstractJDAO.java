@@ -186,17 +186,19 @@ public abstract class AbstractJDAO
   }
 
   protected void writeComment(User user) throws IOException {
-    out_.write("// Modified by ");
-    out_.write(user.getFirstName());
-    if ( ! SafetyUtil.isEmpty(user.getLastName()) ) {
-      out_.write(" ");
-      out_.write(user.getLastName());
+    String st;
+    st = "// Modified by ";
+    st += user.getFirstName();
+    if (!SafetyUtil.isEmpty(user.getLastName())) {
+      st += " ";
+      st += user.getLastName();
     }
-    out_.write(" (");
-    out_.write(String.valueOf(user.getId()));
-    out_.write(")");
-    out_.write(" at ");
-    out_.write(sdf.get().format(Calendar.getInstance().getTime()));
+    st += " (";
+    st += String.valueOf(user.getId());
+    st += ")";
+    st += " at ";
+    st += sdf.get().format(Calendar.getInstance().getTime());
+    out_.write(st);
     out_.newLine();
   }
 
